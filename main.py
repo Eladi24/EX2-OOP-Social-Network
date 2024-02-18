@@ -3,7 +3,7 @@ from SocialNetwork import SocialNetwork
 
 def main():
     # Creating the network
-    network = SocialNetwork()
+    network = SocialNetwork("Twitter")
     print()
 
     # Creating users

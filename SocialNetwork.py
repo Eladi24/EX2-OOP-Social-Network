@@ -4,39 +4,48 @@ from User import User
 
 
 class SocialNetwork:
-
     __instance = None
 
-    def __new__(cls, **kwargs):
+    def __new__(cls, name):
         # If an instance doesn't exist, create one
         if cls.__instance is None:
-            cls.__instance = super().__new__(cls, kwargs)
+            cls.__instance = super().__new__(cls)
 
         return cls.__instance
 
     def __init__(self, name):
         self.name = name
-        self.users = []
+        self.users = {}
         self.logged_in_users = []
+        print(f"The social network {self.name} was created!")
 
-    def sign_up(self, username, password):
-        if any(user.user_name == username for user in self.users):
+    def sign_up(self, user_name, password):
+        if user_name in self.users:
             print("Error: Username already in use.")
             return False
         if not (4 <= len(password) <= 8):
             print("Error: Password must be between 4 and 8 characters.")
             return False
-        user = User(username, password)
-        self.users.append(user)
+        user = User(user_name, password)
+        self.users[user_name] = user
         return user
 
-    def log_in(self, user, password):
-        if user.password == password and not user.is_logged_in():
-            user.online = True
+    def log_in(self, user_name, password):
+        if user_name in self.users and self.users[user_name].password == password:
+            if self.users[user_name].is_logged_in():
+                return
+            else:
+                self.users[user_name].online = True
+                print(f"{user_name} connected")
 
-    def log_out(self, user):
-        if user.is_logged_in():
-            user.online = False
+    def log_out(self, user_name):
+        if user_name in self.users and not self.users[user_name].is_logged_in():
+            self.users[user_name].online = False
+            print(f"{user_name.user_name} disconnected")
 
-    def print(self):
-        print(f"The social network {self.name} was created!")
+    def __str__(self):
+        result = f"{self.name} social network:"
+        for user_name, user in self.users.items():
+            result += (f"User: {user_name}, Number of posts: {len(user.posts)}, Number of followers: "
+                       f"{len(user.followers)}\n")
+        return result

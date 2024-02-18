@@ -9,8 +9,8 @@ class ImagePost(Post):
         super().__init__(user)
         self.image_path = image_path
 
-    def print_post(self):
-        pass
+    def __str__(self):
+        return f"{self.user.user_name} posted a picture"
 
     def display(self):
         # Read the image file

@@ -11,9 +11,9 @@ class User:
         self.user_name = user_name
         self.password = password
         # Users that this user is following
-        self.following = []
+        self.following = set()
         # Users that are following this user
-        self.followers = []
+        self.followers = set()
         self.posts = []
         self.online = True
         self.notifications = []
@@ -22,17 +22,18 @@ class User:
         if not self.online:
             print("You must be logged in to follow a user")
             return
-        if other_user not in self.following:
-            self.following.append(other_user)
-            other_user.followers.append(self)
+        self.following.add(other_user)
+        other_user.followers.add(self)
+        print(f"{self.user_name} started following {other_user.user_name}")
 
     def unfollow(self, other_user):
         if not self.online:
             print("You must be logged in to unfollow a user")
             return
-        if other_user in self.following:
-            self.following.remove(other_user)
-            other_user.followers.remove(self)
+
+        self.following.remove(other_user)
+        other_user.followers.remove(self)
+        print(f"{self.user_name} unfollows {other_user.user_name}")
 
     def publish_post(self, post_type, *args):
         if not self.online:
@@ -47,6 +48,8 @@ class User:
         else:
             raise ValueError("Invalid post type")
         self.posts.append(post)
+        self.notify_followers(post)
+        print(post)
         return post
 
     def notify_followers(self, post):
@@ -57,8 +60,9 @@ class User:
     def receive_notification(self, notification):
         self.notifications.insert(0, notification)
 
-    def print_user(self):
-        pass
+    def __str__(self):
+        return (f"User name: {self.user_name}, Number of posts: {self.posts.__sizeof__()}, "
+                f"Number of followers: {self.followers.__sizeof__()}")
 
     def print_notifications(self):
         print(f"{self.user_name}'s notifications:")
@@ -67,3 +71,5 @@ class User:
 
     def is_logged_in(self):
         return self.online
+
+

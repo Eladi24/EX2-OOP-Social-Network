@@ -7,5 +7,6 @@ class TextPost(Post):
         super().__init__(user)
         self.text = text
 
-    def print_post(self):
-        pass
+    def __str__(self):
+        return (f"{self.user.user_name}:"
+                f"{self.text}")
