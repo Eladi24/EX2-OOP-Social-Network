@@ -12,9 +12,11 @@ class SalePost(Post):
 
     def __str__(self):
         if self.sale_status is True:
-            return f"For sale! {self.item}, price: {self.price} pickup from: {self.location}"
+            return (f"{self.user.user_name} posted a product for sale:\n"
+                    f"For sale! {self.item}, price: {self.price}, pickup from: {self.location}\n")
         else:
-            return f"Sold! {self.item}, price: {self.price} pickup from: {self.location}"
+            return (f"{self.user.user_name} posted a product for sale:\n"
+                    f"Sold! {self.item}, price: {self.price}, pickup from: {self.location}\n")
 
     def discount(self, reduction_num, password):
         self.price = self.price - (self.price * reduction_num)/100
@@ -24,3 +26,4 @@ class SalePost(Post):
     def sold(self, password):
         if self.user.password == password:
             self.sale_status = False
+            print(f"{self.user.user_name}'s product is sold")

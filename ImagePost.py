@@ -10,7 +10,7 @@ class ImagePost(Post):
         self.image_path = image_path
 
     def __str__(self):
-        return f"{self.user.user_name} posted a picture"
+        return f"{self.user.user_name} posted a picture\n"
 
     def display(self):
         # Read the image file
@@ -19,3 +19,4 @@ class ImagePost(Post):
         # Display the image
         plt.imshow(img)
         plt.show()
+        print("Shows picture")

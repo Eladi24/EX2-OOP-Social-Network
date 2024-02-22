@@ -17,14 +17,14 @@ class Post(ABC):
                 notification = f"{user.user_name} liked your post"
                 self.user.receive_notification(notification)
                 self.liked += 1
-                print(notification)
+                print(f"notification to {self.user.user_name}: {notification}")
 
     def comment(self, user, text: str):
         self.comments.append((user, text))
         if self.user != user:
-            notification = f"{user.user_name} commented on your post: {text}"
+            notification = f"{user.user_name} commented on your post"
             self.user.receive_notification(notification)
-            print(notification)
+            print(f"notification to {self.user.user_name}: {notification}: {text}")
 
     @abstractmethod
     def __str__(self):

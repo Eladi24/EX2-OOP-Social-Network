@@ -8,5 +8,5 @@ class TextPost(Post):
         self.text = text
 
     def __str__(self):
-        return (f"{self.user.user_name}:"
-                f"{self.text}")
+        return (f"{self.user.user_name} published a post:\n"
+                f"\"{self.text}\"\n")

@@ -39,13 +39,15 @@ class SocialNetwork:
                 print(f"{user_name} connected")
 
     def log_out(self, user_name):
-        if user_name in self.users and not self.users[user_name].is_logged_in():
+        if user_name in self.users and self.users[user_name].is_logged_in():
             self.users[user_name].online = False
-            print(f"{user_name.user_name} disconnected")
+            print(f"{user_name} disconnected")
+        else:
+            print(f"{user_name} is already disconnected")
 
     def __str__(self):
-        result = f"{self.name} social network:"
+        result = f"{self.name} social network:\n"
         for user_name, user in self.users.items():
-            result += (f"User: {user_name}, Number of posts: {len(user.posts)}, Number of followers: "
+            result += (f"User name: {user_name}, Number of posts: {len(user.posts)}, Number of followers: "
                        f"{len(user.followers)}\n")
         return result
