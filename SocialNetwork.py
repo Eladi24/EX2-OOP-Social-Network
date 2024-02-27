@@ -21,11 +21,11 @@ class SocialNetwork:
 
     def sign_up(self, user_name, password):
         if user_name in self.users:
-            print("Error: Username already in use.")
-            return False
+            raise NameError("User is already signed up")
+
         if not (4 <= len(password) <= 8):
-            print("Error: Password must be between 4 and 8 characters.")
-            return False
+            raise ValueError("Illegal password, try again")
+
         user = User(user_name, password)
         self.users[user_name] = user
         return user
@@ -33,7 +33,7 @@ class SocialNetwork:
     def log_in(self, user_name, password):
         if user_name in self.users and self.users[user_name].password == password:
             if self.users[user_name].is_logged_in():
-                return
+                raise RuntimeError(f"{user_name} is already logged in")
             else:
                 self.users[user_name].online = True
                 print(f"{user_name} connected")
@@ -43,7 +43,7 @@ class SocialNetwork:
             self.users[user_name].online = False
             print(f"{user_name} disconnected")
         else:
-            print(f"{user_name} is already disconnected")
+            raise RuntimeError(f"{user_name} is already disconnected")
 
     def __str__(self):
         result = f"{self.name} social network:\n"

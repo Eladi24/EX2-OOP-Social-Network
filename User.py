@@ -4,11 +4,11 @@ from Post import Post
 from TextPost import TextPost
 from ImagePost import ImagePost
 from SalePost import SalePost
-from Observer import Sender
+from Observer import Sender, Member
 from PostFactory import PostFactory
 
 
-class User:
+class User(Sender, Member):
     def __init__(self, user_name, password):
         self.user_name = user_name
         self.password = password
@@ -23,7 +23,7 @@ class User:
     def follow(self, other_user):
         if not self.online:
             # print("You must be logged in to follow a user")
-            return
+            raise ValueError("User not logged in")
         self.following.add(other_user)
         other_user.followers.add(self)
         print(f"{self.user_name} started following {other_user.user_name}")
@@ -31,7 +31,7 @@ class User:
     def unfollow(self, other_user):
         if not self.online:
             # print("You must be logged in to unfollow a user")
-            return
+            raise ValueError("User not logged in")
 
         self.following.remove(other_user)
         other_user.followers.remove(self)
@@ -40,28 +40,19 @@ class User:
     def publish_post(self, post_type, *args):
         if not self.online:
             # print("You must be logged in to publish a post")
-            return
-        # if post_type == "Text":
-        #     post = TextPost(self, *args)
-        # elif post_type == "Image":
-        #     post = ImagePost(self, *args)
-        # elif post_type == "Sale":
-        #     post = SalePost(self, *args)
-        # else:
-        #     raise ValueError("Invalid post type")
+            raise ValueError("User not logged in")
         post = PostFactory.factory(post_type, self, *args)
         self.posts.append(post)
-        self.notify_followers(post)
-        # Notification.notify_followers_post(self.followers, post)
+        self.notify(post)
         print(post)
         return post
 
-    def notify_followers(self, post):
+    def notify(self, post):
         for follower in self.followers:
             notification = f"{self.user_name} has a new post"
-            follower.receive_notification(notification)
+            follower.update(notification)
 
-    def receive_notification(self, notification):
+    def update(self, notification):
         # self.notifications.insert(0, notification)
         self.notifications.append(notification)
 
