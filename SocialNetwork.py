@@ -14,40 +14,55 @@ class SocialNetwork:
         return cls.__instance
 
     def __init__(self, name):
-        self.name = name
-        self.users = {}
-        self.logged_in_users = []
-        print(f"The social network {self.name} was created!")
+        self.__name = name
+        self.__users = {}
+        print(f"The social network {self.__name} was created!")
 
     def sign_up(self, user_name, password):
-        if user_name in self.users:
+        if user_name in self.__users:
             raise NameError("User is already signed up")
 
         if not (4 <= len(password) <= 8):
             raise ValueError("Illegal password, try again")
 
         user = User(user_name, password)
-        self.users[user_name] = user
+        self.__users[user_name] = user
         return user
 
     def log_in(self, user_name, password):
-        if user_name in self.users and self.users[user_name].password == password:
-            if self.users[user_name].is_logged_in():
+        if user_name in self.__users and self.__users[user_name].get_password(self) == password:
+
+            if self.__users[user_name].is_logged_in():
                 raise RuntimeError(f"{user_name} is already logged in")
+
             else:
-                self.users[user_name].online = True
+                self.__users[user_name].set_logged_in(True)
                 print(f"{user_name} connected")
 
-    def log_out(self, user_name):
-        if user_name in self.users and self.users[user_name].is_logged_in():
-            self.users[user_name].online = False
-            print(f"{user_name} disconnected")
+        elif user_name in self.__users:
+            raise PermissionError("Incorrect password")
+
         else:
-            raise RuntimeError(f"{user_name} is already disconnected")
+            raise RuntimeError(f"{user_name} doesn't exist")
+
+    def log_out(self, user_name):
+        if user_name in self.__users:
+
+            if self.__users[user_name].is_logged_in():
+                self.__users[user_name].set_logged_in(False)
+                print(f"{user_name} disconnected")
+
+            else:
+                raise RuntimeError(f"{user_name} is already disconnected")
+
+        else:
+            raise RuntimeError(f"{user_name} doesn't exist")
 
     def __str__(self):
-        result = f"{self.name} social network:\n"
-        for user_name, user in self.users.items():
-            result += (f"User name: {user_name}, Number of posts: {len(user.posts)}, Number of followers: "
-                       f"{len(user.followers)}\n")
+        result = f"{self.__name} social network:\n"
+
+        for user_name, user in self.__users.items():
+            result += (f"User name: {user_name}, Number of posts: {user.get_posts_num()}, Number of followers: "
+                       f"{user.get_followers_num()}\n")
         return result
+
