@@ -1,5 +1,4 @@
 # User class
-# ToDO Observer pattern
 from Post import Post
 from TextPost import TextPost
 from ImagePost import ImagePost

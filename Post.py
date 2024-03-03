@@ -1,5 +1,4 @@
 # Abstracts Post class
-# ToDO Factory pattern
 from abc import ABC, abstractmethod
 
 

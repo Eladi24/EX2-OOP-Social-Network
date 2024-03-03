@@ -1,5 +1,4 @@
 # Network class
-# ToDo Singleton pattern
 from User import User
 
 
